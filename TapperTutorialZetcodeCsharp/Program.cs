@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using System;
 using System.ComponentModel.Design;
+using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -10,11 +12,12 @@ namespace TapperTutorialZetcodeCsharp
     {
         static void Main(string[] args)
         {
-            var cs = @"Server=.\SQLLOCALDB;Database=SampleDB;Trusted_Connection=True;";
+            //var cs = @"Server=.\SQLLOCALDB;Database=SampleDB;Trusted_Connection=True;";
+            var cs = ConfigurationManager.ConnectionStrings["DapperConnection"].ConnectionString;
 
-            using var con = new SqlConnection(cs);
-            con.Open();
-
+            using IDbConnection con = new SqlConnection(cs);
+            //using var con = new SqlConnection(cs);
+            //con.Open();
             var version = con.ExecuteScalar<string>("SELECT @@VERSION");
 
             Console.WriteLine(version);
