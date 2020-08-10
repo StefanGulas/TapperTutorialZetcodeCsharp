@@ -39,13 +39,13 @@ namespace TapperTutorialZetcodeCsharp
             Console.WriteLine("'INSERT' table affected rows: " + noOfRowsInsert);
 
             var cars2 = con.Query<Car>("SELECT * FROM cars WHERE Id=@Id", 
-                new { id = 3 });
-
+                new { id = 20 }).ToList();
 
             foreach (var car in cars2)
             {
-                Console.WriteLine(car);
+                Console.WriteLine("Parameterized Query " + car);
             }
+
 
             var continueQuery = true;
 
