@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System;
+using System.ComponentModel.Design;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -38,13 +39,22 @@ namespace TapperTutorialZetcodeCsharp
             int noOfRowsInsert = con.Execute("INSERT INTO dbo.[cars] VALUES ('BMW', 35400), ('VW',12000)");
             Console.WriteLine("'INSERT' table affected rows: " + noOfRowsInsert);
 
-            var cars2 = con.Query<Car>("SELECT * FROM cars WHERE Id=@Id", 
+            var cars2 = con.Query<Car>("SELECT * FROM cars WHERE Id=@Id",
                 new { id = 20 }).ToList();
 
             foreach (var car in cars2)
             {
                 Console.WriteLine("Parameterized Query " + car);
             }
+
+            int maxId = con.ExecuteScalar<int>("SELECT MAX(Id) FROM cars");
+            Console.WriteLine("Max Id = " + maxId);
+            var maxCar = con.QuerySingle<Car>("SELECT * FROM Cars WHERE Id = @Id", new { Id = maxId }).ToString();
+            Console.WriteLine(maxCar);
+            //int maxId = Convert.ToInt32(con.Query<Car>("SELECT MAX(Id) FROM cars"));
+            var cars4 = con.Execute(@"DELETE FROM [cars] WHERE ID = @Id", new { Id = maxId });
+
+
 
 
             var continueQuery = true;
